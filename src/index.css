@@ -1,0 +1,63 @@
+
+:root {
+  /* Pinky palette */
+  --bg: #1a0b17; --card: #261025; --text: #ffe6f4; --muted: #f7b7d5;
+  --accent: #ec4899; --accent-2: #fb7185; --danger: #fb7185;
+  --kbd: #3b1638; --kbd-hover: #4a1b47; --kbd-disabled: #2a0f28;
+  --ring: rgba(236, 72, 153, 0.45);
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", "Noto Sans Bulgarian", "Noto Sans Cyrillic", Arial, "Helvetica Neue", sans-serif; background: radial-gradient(1200px 600px at 50% -10%, #381337, #1a0b17); color: var(--text); }
+.app { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; padding: max(env(safe-area-inset-top, 12px), 12px) max(env(safe-area-inset-right, 12px), 12px) max(env(safe-area-inset-bottom, 12px), 12px) max(env(safe-area-inset-left, 12px), 12px); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.title { margin: 0; font-weight: 900; letter-spacing: 0.5px; font-size: clamp(18px, 3.2vw, 28px); }
+.header .controls { display: flex; gap: 8px; }
+button.primary, button.secondary { appearance: none; border: none; border-radius: 14px; padding: 10px 14px; font-weight: 800; font-size: 14px; color: white; cursor: pointer; transition: transform .05s ease, background .2s ease, box-shadow .2s ease; outline-offset: 2px; }
+button.primary { background: linear-gradient(180deg, #f472b6, var(--accent)); box-shadow: 0 6px 18px rgba(236, 72, 153, .35); }
+button.primary:active { transform: translateY(1px); }
+button.primary:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+button.secondary { background: #4c1d4f; color: #ffe6f4; }
+button.secondary:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+.main-card { background: linear-gradient(180deg, #201022, var(--card)); border: 1px solid #542056; border-radius: 18px; padding: 14px; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; box-shadow: 0 10px 32px rgba(0,0,0,.35); }
+.info-row { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: var(--muted); }
+.info-chip { background: #1f0d1f; border: 1px solid #5b235f; padding: 6px 10px; border-radius: 999px; }
+.word-area { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .word-area { grid-template-columns: 1fr; } }
+.canvas { background: #1f0d1f; border: 1px solid #5b235f; border-radius: 14px; padding: 10px; display: grid; place-items: center; min-height: 220px; }
+.word { background: #1f0d1f; border: 1px solid #5b235f; border-radius: 14px; padding: 12px 14px; display: grid; align-content: center; gap: 8px; }
+.word .mask { display: flex; flex-wrap: wrap; gap: 8px; font-weight: 900; letter-spacing: 2px; font-size: clamp(22px, 6vw, 42px); justify-content: center; }
+.mask-cell { transition: color .2s ease; }
+.mask-cell.hidden { color: #c47ca4; }
+.mask-cell.revealed { color: var(--text); }
+@keyframes popIn { 0% { transform: scale(0.6); color: #ffe2f4; text-shadow: 0 0 0 rgba(236,72,153,0);} 60% { transform: scale(1.15); color: #fff2f9; text-shadow: 0 0 12px rgba(236,72,153,.35);} 100% { transform: scale(1); color: var(--text); text-shadow: 0 0 0 rgba(236,72,153,0);} }
+.just-revealed { animation: popIn 600ms ease-out both; }
+.word .hint { font-size: 12px; color: var(--muted); text-align: center; }
+.keyboard { position: sticky; bottom: 0; background: linear-gradient(180deg, transparent, rgba(26, 11, 23, .75) 35%, rgba(26, 11, 23, .95)); padding-top: 8px; }
+.keyboard .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; background: #1f0d1f; border: 1px solid #5b235f; border-radius: 14px; padding: 10px; }
+.key { height: 48px; min-height: 48px; background: var(--kbd); color: var(--text); border: 1px solid #6b2a6f; border-radius: 12px; font-weight: 900; font-size: 16px; letter-spacing: 0.5px; display: grid; place-items: center; cursor: pointer; user-select: none; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0); }
+.key:hover { background: var(--kbd-hover); }
+.key:active { transform: translateY(1px); }
+.key.correct { background: #2e1631; border-color: #b64da4; color: #ffd8f0; }
+.key.wrong { background: #311420; border-color: #e0677f; color: #ffd9df; }
+.key:disabled { cursor: not-allowed; background: var(--kbd-disabled); color: #c084a1; border-color: #552055; }
+@keyframes pulseCorrect { 0% { transform: scale(1); box-shadow: 0 0 0 rgba(236,72,153,0);} 50% { transform: scale(1.06); box-shadow: 0 0 18px rgba(236,72,153,.35);} 100% { transform: scale(1); box-shadow: 0 0 0 rgba(236,72,153,0);} }
+.pulse-correct { animation: pulseCorrect 400ms ease-out; }
+@keyframes shakeWrong { 0%, 100% { transform: translateX(0);} 20% { transform: translateX(-4px);} 40% { transform: translateX(4px);} 60% { transform: translateX(-3px);} 80% { transform: translateX(3px);} }
+.shake-wrong { animation: shakeWrong 250ms ease-in-out; }
+.footer { text-align: center; color: var(--muted); font-size: 12px; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.mask, .key, .keyboard, .controls, .tab, .setup { user-select: none; }
+
+/* Overlay setup styles (pinky theme) */
+.overlay { position: fixed; inset: 0; background: rgba(26,11,23,.75); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.setup { width: min(560px, 100%); background: #1f0d1f; border: 1px solid #5b235f; border-radius: 16px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.45); display: grid; gap: 12px; }
+.setup h2 { margin: 0; font-size: 20px; }
+.toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tab { background: #2b1230; border: 1px solid #5b235f; color: #ffd9ea; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 800; }
+.tab.active { background: linear-gradient(180deg, #f472b6, var(--accent)); color: white; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 12px; color: var(--muted); }
+.field input { background: #16091a; border: 1px solid #5b235f; color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+.field .error { color: #ffd0d6; font-size: 12px; }
+.field.muted { color: var(--muted); font-size: 14px; }
+.setup-actions { display: flex; justify-content: flex-end; }
